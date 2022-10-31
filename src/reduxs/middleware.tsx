@@ -1,4 +1,3 @@
-import { StoreEnhancer } from '@reduxjs/toolkit';
 import { applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 

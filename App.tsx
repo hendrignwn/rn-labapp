@@ -4,7 +4,7 @@ import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Index from './src';
-import { store, persistor } from './src/reduxs/store';
+import { configureStore, persistor } from './src/reduxs/store';
 import theme from './src/utils/theme';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
     </View>
   );
   return (
-    <Provider store={store}>
+    <Provider store={configureStore}>
       <PaperProvider theme={theme}>
         <PersistGate persistor={persistor} loading={renderLoading()}>
           <Index />

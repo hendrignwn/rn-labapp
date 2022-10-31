@@ -1,6 +1,6 @@
 import axios from 'axios';
 // @ts-ignore
-import { API_URL, API_KEY } from '@env';
+import { API_URL } from '@env';
 
 console.log(API_URL);
 
@@ -9,7 +9,6 @@ const api = axios.create({
   headers: {
     Accept: 'application/json',
     crossDomain: true,
-    api_key: API_KEY,
   },
 });
 

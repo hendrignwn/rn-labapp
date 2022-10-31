@@ -1,19 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore as baseConfigureStore } from '@reduxjs/toolkit';
+import { createStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import apiInterceptors from './interceptor';
 import middleware from './middleware';
-import reducers from './reducer';
+import combineReducers from './reducer';
 
 const persistConfig = {
   key: 'lab-app-mobile',
   storage: AsyncStorage,
 };
 
-const persistedReducer = persistReducer(persistConfig, reducers);
+const persistedReducer = persistReducer(persistConfig, combineReducers);
 
 // @ts-ignore
-export const store = configureStore(persistedReducer, middleware);
-apiInterceptors(store);
+export const configureStore = createStore(persistedReducer, middleware);
+apiInterceptors(configureStore);
 
-export const persistor = persistStore(store);
+export const persistor = persistStore(configureStore);
