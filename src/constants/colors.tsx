@@ -1,0 +1,11 @@
+export const PRIMARY_COLOR = '#E20714';
+export const SECONDARY_COLOR = '#617C9D';
+export const DANGER_COLOR = '#ff6666';
+export const ERROR_COLOR = '#ff6666';
+export const SUCCESS_COLOR = '#0d7d2f';
+export const INFO_COLOR = '#D6AD44';
+export const GREY_COLOR = '#f9f9f9';
+export const WHTIE_COLOR = '#FFFFFF';
+export const BLACK_COLOR = '#000000';
+export const DARK_COLOR = '#888888';
+export const TEXT_COLOR = '#617C9D';
