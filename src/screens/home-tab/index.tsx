@@ -1,116 +1,59 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { WHTIE_COLOR } from '@src/constants/colors';
+import { getBrowseCategories } from '@src/reduxs/home/action';
+import { BrowseCatgoryParams } from '@src/reduxs/home/types';
+import React, { useCallback, useEffect } from 'react';
+import { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native-gesture-handler';
+import { Card } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
 
-function HomeTabScreen() {
+function HomeTabScreen(props: any) {
+  const { navigation } = props;
+  const dispatch = useDispatch();
+  const [items, setItems] = useState([]);
+  const [refreshing, setRefreshing] = useState(true);
+  const loadList = async (params: BrowseCatgoryParams = {}) => {
+    const resp = await dispatch(getBrowseCategories(params) as any);
+    setItems(resp?.categories?.items);
+    setRefreshing(false);
+  };
+  useEffect(() => {
+    loadList();
+  }, []);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    loadList();
+  }, []);
+
+  const renderItem = ({ item, index }) => (
+    <Card
+      key={index}
+      style={styles.card}
+      onPress={() => navigation.navigate('DetailScreen', item)}>
+      <Card.Title title={item.name} />
+      <Card.Cover source={{ uri: item.icons[0]?.url }} resizeMode={'contain'} />
+    </Card>
+  );
   return (
-    <ScrollView keyboardShouldPersistTaps="always">
-      <View style={{ margin: 16 }}>
-        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-          What is Lorem Ipsum?
-        </Text>
-
-        <Text style={styles.paragraph}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </Text>
-        <Text style={styles.paragraph}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </Text>
-        <Text style={styles.paragraph}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </Text>
-        <Text style={styles.paragraph}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </Text>
-        <Text style={styles.paragraph}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </Text>
-        <Text style={styles.paragraph}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </Text>
-        <Text style={styles.paragraph}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </Text>
-        <Text style={styles.paragraph}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen book. It has survived not only
-          five centuries, but also the leap into electronic typesetting,
-          remaining essentially unchanged. It was popularised in the 1960s with
-          the release of Letraset sheets containing Lorem Ipsum passages, and
-          more recently with desktop publishing software like Aldus PageMaker
-          including versions of Lorem Ipsum.
-        </Text>
-        <Text style={{ fontStyle: 'italic', fontSize: 10, marginTop: 46 }}>
-          Pembaruan Terakhir : 31/01/2018 21.40
-        </Text>
-      </View>
-    </ScrollView>
+    <FlatList
+      data={items}
+      keyExtractor={(item) => item.id}
+      renderItem={renderItem}
+      style={styles.root}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      onEndReachedThreshold={0.4}
+      // onEndReached={onLoadMore}
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  paragraph: {
-    marginTop: 16,
-    lineHeight: 24,
-  },
+  root: { flex: 1, backgroundColor: WHTIE_COLOR },
+  card: { marginVertical: 8 },
 });
 
 export default HomeTabScreen;

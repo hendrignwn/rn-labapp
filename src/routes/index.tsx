@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeTabScreen from '@src/screens/home-tab';
 import AccountTabScreen from '@src/screens/account-tab';
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '@src/constants/colors';
+import DetailScreen from '@src/screens/detail';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -47,6 +48,13 @@ function Routes(props: any) {
           component={ContentScreen}
           options={{
             headerTitle: 'Content',
+          }}
+        />
+        <Stack.Screen
+          name="DetailScreen"
+          component={DetailScreen}
+          options={{
+            headerTitle: 'Detail',
           }}
         />
       </Stack.Navigator>
